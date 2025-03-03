@@ -1,0 +1,80 @@
+Using the PROMPT_COMMAND envrionment variable
+When the last command in an interactive bash instance is done, the evaluated PS1 variable is displayes. Before actually displaying PS1 bash looks whether the PROMPT_COMMAND is set. This value of this var must be a callable program or script. If this var is set this program/script is called BEFORE the PS1 prompt is displayed.
+
+# just a stupid function, we will use to demonstrate
+# we check the date if Hour is 12 and Minute is lower than 59
+lunchbreak(){ 
+   if (( $(date +%H) == 12 && $(date +%M) < 59 )); then 
+      # and print colored \033[ starts the escape sequence 
+      # 5; is blinking attribute
+      # 2; means bold
+      # 31 says red
+      printf "\033[5;1;31mmind the lunch break\033[0m\n";
+   else
+      printf "\033[33mstill working...\033[0m\n"; 
+   fi; 
+}
+
+# activating it
+export PROMPT_COMMAND=lunchbreak
+Using PS2
+PS2 is displayed when a command extends to more than one line and bash awaits more keystrokes. It is displayed too when a compound command like while...do..done and alike is entered.
+
+export PS2="would you please complete this command?\n" 
+# now enter a command extending to at least two lines to see PS2
+Using PS3
+When the select statement is executed, it displays the given items prefixed with a number and then displays the PS3 prompt:
+
+export PS3="  To choose your language type the preceding number : "
+select lang in EN CA FR DE; do
+   # check input here until valid.
+   break
+done
+Using PS4
+PS4 is displayes when bash is in debugging mode.
+
+#!/usr/bin/env bash
+
+# switch on debugging
+set -x
+
+# define a stupid_func
+stupid_func(){
+   echo I am line 1 of stupid_func
+   echo I am line 2 of stupid_func
+}
+
+# setting the PS4 "DEBUG" prompt
+export PS4='\nDEBUG level:$SHLVL subshell-level: $BASH_SUBSHELL \nsource-file:${BASH_SOURCE} line#:${LINENO} function:${FUNCNAME[0]:+${FUNCNAME[0]}(): }\nstatement: '
+
+# a normal statement
+echo something
+
+# function call
+stupid_func
+
+# a pipeline of commands running in a subshell 
+( ls -l | grep 'x' )
+Using PS1
+PS1 is the normal system prompt indicating that bash waits for commands being typed in. It understands some escape sequences and can execute functions or progams. As bash has to position the cursor after the displayes prompt, it needs to know how to calculate the effective length of the prompt string. To indicate non printing sequences of chars within the PS1 variable escaped braces are used: \[ a non printing sequence of chars \]. All being said holds true for all PS* vars.
+
+(The black caret indicates cursor)
+
+#everything not being an escape sequence will be literally printed
+export PS1="literal sequence "  # Prompt is now:
+literal sequence ▉
+
+# \u == user \h == host \w == actual working directory
+# mind the single quotes avoiding interpretation by shell
+export PS1='\u@\h:\w > ' # \u == user, \h == host, \w actual working dir
+looser@host:/some/path > ▉
+
+# executing some commands within PS1
+# following line will set foreground color to red, if user==root, 
+# else it resets attributes to default
+# $( (($EUID == 0)) &&  tput setaf 1)
+# later we do reset attributes to default with
+# $(  tput sgr0 )
+# assuming being root:
+PS1="\[$( (($EUID == 0)) &&  tput setaf 1 \]\u\[$(tput sgr0)\]@\w:\w \$ "
+looser@host:/some/path > ▉  # if not root else <red>root<default>@host....    

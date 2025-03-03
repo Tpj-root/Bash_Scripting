@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Pastebin</title>
+</head>
+<body>
+    <h2>Paste and Save</h2>
+    <textarea id="textArea" rows="20" cols="80"></textarea><br>
+    <button onclick="saveText()">Save</button>
+
+    <script>
+        function saveText() {
+            let text = document.getElementById("textArea").value;
+            fetch('/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: text })
+            }).then(response => alert("Saved!"));
+        }
+
+        // Load saved text on page load
+        fetch('/load')
+            .then(response => response.text())
+            .then(data => document.getElementById("textArea").value = data);
+    </script>
+</body>
+</html>

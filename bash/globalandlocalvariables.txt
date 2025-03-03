@@ -1,0 +1,42 @@
+Global variables
+var="hello"
+
+function foo(){
+    echo $var
+}
+
+foo
+Will obviously output "hello", but this works the other way around too:
+
+function foo()  {
+    var="hello"
+}
+
+foo
+echo $var
+Will also output "hello"
+
+Local variables
+function foo() {
+    local var
+    var="hello"
+}
+
+foo
+echo $var
+Will output nothing, as var is a variable local to the function foo, and its value is not visible from outside of it.
+
+Mixing the two together
+var="hello"
+
+function foo(){
+    local var="sup?"
+    echo "inside function, var=$var"
+}
+
+foo
+echo "outside function, var=$var"
+Will output
+
+inside function, var=sup?
+outside function, var=hello

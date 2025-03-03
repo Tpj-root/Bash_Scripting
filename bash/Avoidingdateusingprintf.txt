@@ -1,0 +1,9 @@
+Using printf -v foo '%(...)T' is identical to foo=$(date +'...') and saves a fork for the call to the external program date.
+
+Get the current date
+$ printf '%(%F)T\n'
+2016-08-17
+Set variable to current time
+$ printf -v now '%(%T)T'
+$ echo "$now"
+12:42:47

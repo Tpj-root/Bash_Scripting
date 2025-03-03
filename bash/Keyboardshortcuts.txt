@@ -1,0 +1,46 @@
+bind -P show all configured shortcuts.
+
+Recall Shortcuts
+Shortcut	Description
+Ctrl + r	search the history backwards
+Ctrl + p	previous command in history
+Ctrl + n	next command in history
+Ctrl + g	quit history searching mode
+Alt + .	use the last word of the previous command
+repeat to get the last word of the previous + 1 command
+Alt + n Alt + .	use the nth word of the previous command
+!! + Return	execute the last command again (useful when you forgot sudo: sudo !!)
+Editing Shortcuts
+Shortcut	Description
+Ctrl + a	move to the beginning of the line
+Ctrl + e	move to the end of the line
+Ctrl + k	Kill the text from the current cursor position to the end of the line.
+Ctrl + u	Kill the text from the current cursor position to the beginning of the line
+Ctrl + w	Kill the word behind the current cursor position
+Alt + b	move backward one word
+Alt + f	move forward one word
+Ctrl + Alt + e	shell expand line
+Ctrl + y	Yank the most recently killed text back into the buffer at the cursor.
+Alt + y	Rotate through killed text. You can only do this if the prior command is Ctrl + y or Alt + y.
+Killing text will delete text, but save it so that the user can reinsert it by yanking. Similar to cut and paste except that the text is placed on a kill ring which allows for storing more than one set of text to be yanked back on to the command line.
+
+You can find out more in the emacs manual.
+
+Job Control
+Shortcut	Description
+Ctrl + c	Stop the current job
+Ctrl + z	Suspend the current job (send a SIGTSTP signal)
+Macros
+Shortcut	Description
+Ctrl + x, (	start recording a macro
+Ctrl + x, )	stop recording a macro
+Ctrl + x, e	execute the last recorded macro
+Custome Key Bindings
+With the bind command it is possible to define custom key bindings.
+
+The next example bind an Alt + w to >/dev/null 2>&1:
+
+bind '"\ew"':"\" >/dev/null 2>&1\""
+If you want to execute the line immediately add \C-m (Enter) to it:
+
+bind '"\ew"':"\" >/dev/null 2>&1\C-m\""

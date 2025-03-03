@@ -1,0 +1,12 @@
+Copy a single file
+Copy foo.txt from /path/to/source/ to /path/to/target/folder/
+
+cp /path/to/source/foo.txt /path/to/target/folder/
+Copy foo.txt from /path/to/source/ to /path/to/target/folder/ into a file called bar.txt
+
+cp /path/to/source/foo.txt /path/to/target/folder/bar.txt
+Copy folders
+copy folder foo into folder bar
+
+cp -r /path/to/foo /path/to/bar
+if folder bar exists before issuing the command, then foo and its content will be copied into the folder bar. However, if bar does not exist before issuing the command, then the folder bar will be created and the content of foo will be placed into bar

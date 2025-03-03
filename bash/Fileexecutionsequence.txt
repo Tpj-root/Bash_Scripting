@@ -1,0 +1,14 @@
+Other files of note are:
+
+/etc/profile, for system-wide (not user specific) initialization code.
+
+.bash_logout, triggered when logging out (think cleanup stuff)
+
+.inputrc, similar to .bashrc but for readline.
+
+.profile vs .bash_profile (and .bash_login)
+.profile is read by most shells on startup, including bash. However, .bash_profile is used for configurations specific to bash. For general initialization code, put it in .profile. If it's specific to bash, use .bash_profile.
+
+.profile isn't actually designed for bash specifically, .bash_profile is though instead. (.profile is for Bourne and other similar shells, which bash is based off) Bash will fall back to .profile if .bash_profile isn't found.
+
+.bash_login is a fallback for .bash_profile, if it isn't found. Generally best to use .bash_profile or .profile instead.

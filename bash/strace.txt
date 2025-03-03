@@ -1,0 +1,16 @@
+How to observe the system calls of a program
+For an executable file or command exec, running this will list all system calls:
+
+$ ptrace exec
+To display specific system calls use -e option:
+
+$ strace -e open exec
+To save the output to a file use the -o option:
+
+$ strace -o output exec
+To find the system calls an active program uses, use the -p option while specifying the pid [how to get pid] :
+
+$ sudo strace -p 1115
+To generate a statistics report of all the system calls used, use option -c:
+
+$ strace -c exec 
