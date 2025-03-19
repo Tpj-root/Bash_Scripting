@@ -1,0 +1,177 @@
+
+This script checks whether the current shell session is interactive 
+before executing any commands or functions inside the if block.
+
+Breakdown:
+
+[[ $- == *i* ]] 
+
+$- holds the current shell options (e.g., himBH in an interactive session).
+*i* checks if the string contains i, which indicates an interactive shell.
+
+
+if [[ $- == *i* ]]; then
+
+    If the shell is interactive, execute the commands inside the then block.
+    
+Example Usage:   
+    
+if [[ $- == *i* ]]; then
+    echo "This is an interactive shell"
+fi
+
+
+Running this in an interactive shell prints:
+"This is an interactive shell"
+
+
+Running in a script or non-interactive shell does nothing.
+
+
+You can check whether your shell session is interactive using this command:
+
+echo $-
+
+[[ $- == *i* ]] && echo "Interactive shell" || echo "Non-interactive shell"
+
+
+what each letter means:
+
+    h → Hash all commands in memory (improves performance when executing frequently used commands).
+    i → Interactive shell (allows job control, prompts, etc.).
+    m → Monitor mode (supports job control and background process notifications).
+    B → Brace expansion is enabled (e.g., {a,b,c} expands to a b c).
+    H → History expansion is enabled (e.g., !! repeats the last command).
+    s → Read commands from standard input (used when running scripts or piping commands into the shell).
+
+
+If you restart your PC and open a **terminal manually**, then run `echo $-`, you **will** see `i` again because it's an interactive shell.  
+
+However, if you check it from a **non-interactive** shell, such as:  
+- Running a script: `bash script.sh`  
+- Using SSH with a command: `ssh user@host 'echo $-'`  
+- Running a cron job  
+
+Then **`i` will be missing**, indicating a non-interactive shell.  
+
+Try running:  
+
+```bash
+bash -c 'echo $-'
+```  
+This will **not** include `i` because it's a non-interactive shell.
+
+
+
+### **Full List of Non-Interactive Shells**  
+
+A **non-interactive shell** is a shell that does not wait for user input and executes commands automatically. Here are different scenarios where a non-interactive shell is used:  
+
+---
+
+### **1. Running a Shell Script**
+```bash
+bash script.sh
+sh script.sh
+```
+- A script runs in a **new shell instance** without user interaction.  
+- `$-` will **not** contain `i`.  
+
+---
+
+### **2. Executing a Command with `bash -c`**
+```bash
+bash -c 'echo $-'
+```
+- Runs a command in a **subshell** without starting an interactive session.  
+- `$-` will **not** include `i`.  
+
+---
+
+### **3. Using SSH with a Command**
+```bash
+ssh user@remote 'echo $-'
+```
+- SSH runs the command on the remote machine and exits.  
+- This does **not** start an interactive session.  
+
+To force an interactive session, use:
+```bash
+ssh -t user@remote 'bash'
+```
+
+---
+
+### **4. Running a Cron Job**
+```bash
+* * * * * /path/to/script.sh
+```
+- Cron jobs execute scripts in a detached shell without user interaction.  
+- `$-` will **not** have `i`.  
+
+---
+
+### **5. Running a Command with `nohup` or `&`**
+```bash
+nohup script.sh &
+./script.sh &
+```
+- The shell runs the command in the background and **does not wait** for user input.  
+- `$-` will **not** contain `i`.  
+
+---
+
+### **6. Running a Command with `su -c` or `sudo`**
+```bash
+su -c 'echo $-'
+sudo bash -c 'echo $-'
+```
+- The command runs as another user in a non-interactive shell.  
+
+---
+
+### **7. Running a Script via Systemd or Init**
+- Scripts executed by **systemd**, `/etc/rc.local`, or **init.d** are non-interactive.  
+- Example:
+  ```bash
+  systemctl start myscript.service
+  ```
+  - The script runs in a **service environment** without user input.  
+
+---
+
+### **8. Executing a Remote Command with `scp` or `rsync`**
+```bash
+scp file user@remote:/path
+rsync -av file user@remote:/path
+```
+- These commands establish a connection but do **not** create an interactive shell.  
+
+---
+
+### **9. Using `find` with `-exec`**
+```bash
+find . -type f -exec bash -c 'echo $-' {} \;
+```
+- Each execution of `bash -c` runs in a **new, non-interactive shell**.  
+
+---
+
+### **10. Running Commands via `xargs`**
+```bash
+echo "echo \$-" | xargs bash -c
+```
+- `xargs` spawns a new shell that is **not interactive**.  
+
+---
+
+### **How to Check if the Shell is Interactive?**
+Run:
+```bash
+[[ $- == *i* ]] && echo "Interactive" || echo "Non-interactive"
+```
+- If **`i` is present**, it’s an **interactive shell**.  
+- If **`i` is missing**, it’s a **non-interactive shell**.  
+
+Let me know if you need more details! 🚀
+
