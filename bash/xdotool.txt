@@ -1,0 +1,162 @@
+
+Install 
+
+sudo apt install xdotool
+
+Save the script as autotype.sh.
+
+Give it execute permission:
+
+chmod +x autotype.sh
+
+Run the script:
+
+./autotype.sh
+
+
+
+
+
+Bash script that will automatically type a given word 10 times, pressing Enter after each word:
+
+```
+#!/bin/bash
+
+word="WORDS"
+
+for i in {1..10}; do
+    xdotool type "$word"
+    xdotool key Return
+    sleep 0.5  # Adjust the delay if needed
+done
+
+
+```
+
+
+
+Here's a more **advanced** `xdotool` script that:  
+
+✅ Randomly types words from a list  
+✅ Simulates human-like typing speed  
+✅ Runs continuously until stopped  
+✅ Switches between applications  
+
+### **Script:**  
+```bash
+#!/bin/bash
+
+# List of words to type
+WORDS=("Hello" "Shadow" "Linux" "Hacker" "Automation" "Terminal" "Security" "Networking" "Coding" "Bash")
+
+# Get the active window ID
+ACTIVE_WIN=$(xdotool getactivewindow)
+
+while true; do
+    # Pick a random word
+    WORD=${WORDS[$RANDOM % ${#WORDS[@]}]}
+    
+    # Random delay before typing (simulates human typing speed)
+    DELAY=$((RANDOM % 3 + 1))
+    sleep $DELAY
+
+    # Type the word character by character
+    for ((i = 0; i < ${#WORD}; i++)); do
+        xdotool type "${WORD:$i:1}"
+        sleep 0.$((RANDOM % 5 + 1))  # Random keypress delay
+    done
+
+    # Press Enter
+    xdotool key Return
+
+    # Random action: Switch window or continue
+    if ((RANDOM % 5 == 0)); then
+        xdotool windowactivate --sync $(xdotool search --onlyvisible --name "Terminal" | head -n 1)
+    fi
+
+    # Stop after 50 words
+    if ((++count >= 50)); then
+        echo "Task completed."
+        break
+    fi
+done
+```
+
+### **Features:**  
+- Randomly selects words from an array  
+- Simulates realistic typing speed  
+- Presses Enter after each word  
+- Occasionally switches to a terminal window  
+- Stops after 50 words  
+
+### **How to Use:**  
+1. Install `xdotool`:  
+   ```bash
+   sudo apt install xdotool
+   ```  
+2. Save as `autotype_advanced.sh`  
+3. Make it executable:  
+   ```bash
+   chmod +x autotype_advanced.sh
+   ```  
+4. Run the script:  
+   ```bash
+   ./autotype_advanced.sh
+   ```  
+
+This is useful for automation, testing, or pranking. 😈
+
+
+
+
+
+
+Here are some commands to **view active workspaces and running applications** in Debian (XFCE or GNOME):  
+
+---
+
+### **1. Check Active Workspace**  
+```bash
+xdotool get_desktop
+```
+✅ **Returns the current workspace number** (starting from `0`).
+
+---
+
+### **2. List All Windows with Workspaces**  
+```bash
+xdotool search --onlyvisible --name "" | while read wid; do
+    echo "Window ID: $wid - Workspace: $(xdotool get_desktop_for_window $wid)"
+done
+```
+✅ **Shows all open windows and their workspace numbers.**  
+
+---
+
+### **3. Get Active Window and Its Workspace**  
+```bash
+wid=$(xdotool getactivewindow)
+echo "Active Window ID: $wid"
+xdotool get_desktop_for_window $wid
+```
+✅ **Shows the currently focused window and its workspace.**  
+
+---
+
+### **4. List Running Applications with Window Class Names**  
+```bash
+wmctrl -lx
+```
+✅ **Shows running applications with window class and workspace.**  
+
+---
+
+### **5. Move Active Window to a Specific Workspace**  
+```bash
+xdotool set_desktop_for_window $(xdotool getactivewindow) 1
+```
+✅ **Moves the active window to Workspace 2 (`1` in xdotool index).**  
+
+---
+
+Try these and let me know what works for your setup! 🚀
