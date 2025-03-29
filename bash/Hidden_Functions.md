@@ -1,8 +1,6 @@
-# Solution 1
-#
-# Unset the Function When Disabled
-#
-# sample code
+#### Solution 1
+#### Unset the Function When Disabled
+#### sample code
 
 ```
 Function_enable=1
@@ -22,9 +20,9 @@ fi
 ```
 
 
-# Solution 2: Dynamically Enable/Disable the Function
-# Create a wrapper script that reloads functions based on Function_enable
-# Now, if you set Function_enable=0 and run toggle_seq10, seq10 disappears. ✅
+#### Solution 2: Dynamically Enable/Disable the Function
+#### Create a wrapper script that reloads functions based on Function_enable
+#### Now, if you set Function_enable=0 and run toggle_seq10, seq10 disappears. ✅
 
 ```
 toggle_seq101() {
@@ -40,9 +38,9 @@ toggle_seq101() {
 toggle_seq101  # Call this after changing Function_enable
 ```
 
-# Solution 3
-# If toggle_seq10 is just a helper function and you don’t want it in suggestions, name it with a _ prefix:
-# Bash autocomplete usually ignores _ prefixed functions unless you type 
+#### Solution 3
+#### If toggle_seq10 is just a helper function and you don’t want it in suggestions, name it with a _ prefix:
+#### Bash autocomplete usually ignores _ prefixed functions unless you type 
 ```
 _toggle_seq102() {
     if [[ "$_Function_enable" -eq 1 ]]; then
@@ -58,10 +56,9 @@ _toggle_seq102() {
 ```
 
 
-# Solution 4
-# Make toggle_seq10 a Local Function
-# If you don’t need toggle_seq10 outside the script, define it inside a conditional block:
-# 
+#### Solution 4
+#### Make toggle_seq10 a Local Function
+#### If you don’t need toggle_seq10 outside the script, define it inside a conditional block:
 
 ```
 _Function_enable=1
@@ -70,15 +67,15 @@ if [[ "$_Function_enable" -eq 1 ]]; then
     seq10() { seq 1 10; sleep 2; }
 fi
 
-# Now _toggle_seq10 is removed after running and won’t show in suggestions.
+#### Now _toggle_seq10 is removed after running and won’t show in suggestions.
 unset -f _toggle_seq10 2>/dev/null  # Remove it after execution
 
 ```
 
 
 
-# Solution 5
-# Use an Alias Instead of a Function
+#### Solution 5
+#### Use an Alias Instead of a Function
 
 ```
 if [[ "$_Function_enable" -eq 1 ]]; then
@@ -103,41 +100,41 @@ Here’s the table with symbols and their names:
 
 
 
-# These symbols can be used as **prefixes** to "hide" functions from regular Bash autocompletion but still allow access when explicitly typed. Here’s what they are called and how they work:  
-# 
-# ### **Symbols & Their Uses in Function Names**
-# | Symbol | Example | Effect |
-# |---------|------------------|--------------------------------------|
-# | `_` (Underscore) | `_myfunc()` | Common for private/internal functions. Still shows if `Tab` is pressed after `_`. |
-# | `.` (Period/Dot) | `.myfunc()` | Less common but works. Needs explicit `.` to autocomplete. |
-# | `@` (At Symbol) | `@myfunc()` | Rarely used, but valid. Suggests only when typing `@` + `Tab`. |
-# | `__` (Double Underscore) | `__myfunc()` | Works like `_`, but useful for deeper internal functions. |
-# | `:` (Colon) | `:myfunc()` | Allowed in Bash function names, avoids autocomplete unless typed. |
+These symbols can be used as **prefixes** to "hide" functions from regular Bash autocompletion but still allow access when explicitly typed. Here’s what they are called and how they work:  
 
-# ### **Best Naming Practice**
-# - **For hiding functions:** Use `_` or `:` (e.g., `_myfunc` or `:myfunc`).  
-# - **For internal system functions:** Use `__` (e.g., `__internal_task`).  
-# - **For rarely used but accessible functions:** Use `.` or `@` (e.g., `.secret_func` or `@debug_func`).  
+##**Symbols & Their Uses in Function Names**
+| Symbol | Example | Effect |
+|---------|------------------|--------------------------------------|
+| `_` (Underscore) | `_myfunc()` | Common for private/internal functions. Still shows if `Tab` is pressed after `_`. |
+| `.` (Period/Dot) | `.myfunc()` | Less common but works. Needs explicit `.` to autocomplete. |
+| `@` (At Symbol) | `@myfunc()` | Rarely used, but valid. Suggests only when typing `@` + `Tab`. |
+| `__` (Double Underscore) | `__myfunc()` | Works like `_`, but useful for deeper internal functions. |
+| `:` (Colon) | `:myfunc()` | Allowed in Bash function names, avoids autocomplete unless typed. |
 
-
+##**Best Naming Practice**
+- **For hiding functions:** Use `_` or `:` (e.g., `_myfunc` or `:myfunc`).  
+- **For internal system functions:** Use `__` (e.g., `__internal_task`).  
+- **For rarely used but accessible functions:** Use `.` or `@` (e.g., `.secret_func` or `@debug_func`).  
 
 
-# Note: Some special characters (like -) cannot be used in function names in Bash.
 
-#  Stick to _ . @ : __
 
-# Use a Period (.)
+#### Note: Some special characters (like -) cannot be used in function names in Bash.
 
-# Typing . + Tab will suggest .function_hidden.
+####  Stick to _ . @ : __
 
-# Hidden from normal autocomplete unless you start with .
+#### Use a Period (.)
+
+#### Typing . + Tab will suggest .function_hidden.
+
+#### Hidden from normal autocomplete unless you start with .
 ```
 .function_hidden() { echo "Secret Function"; }
 ```
 
-# Use @ (or Any Special Character)
+#### Use @ (or Any Special Character)
 
-# Works the same way as _, but @ is less common in functions.
+#### Works the same way as _, but @ is less common in functions.
 
 ```
 @hidden_func() { echo "Not in normal autocomplete"; }
@@ -145,16 +142,16 @@ Here’s the table with symbols and their names:
 
 
 
-# Use Double Underscore (__)
+#### Use Double Underscore (__)
 
-# Works like _, but less likely to interfere with existing functions.
+#### Works like _, but less likely to interfere with existing functions.
 ```
 __internal_func() { echo "Hidden Function"; }
 ```
 
-# Use a Prefix with :
+#### Use a Prefix with :
 
-# Works in most Bash versions.
+#### Works in most Bash versions.
 ````
 :hidden_function() { echo "This is hidden"; }
 ```
